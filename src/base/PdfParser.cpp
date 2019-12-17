@@ -52,6 +52,7 @@
 #include <algorithm>
 #include <iostream>
 #include <limits>
+#include <assert.h>
 
 using std::cerr;
 using std::endl;
@@ -253,6 +254,7 @@ void PdfParser::ParseFile( const PdfRefCountedInputDevice & rDevice, bool bLoadO
     try {
         if( !IsPdfFile() )
         {
+            assert(0 && 0 && 15);
             PODOFO_RAISE_ERROR( ePdfError_NoPdfFile );
         }
     
@@ -383,8 +385,10 @@ bool PdfParser::IsPdfFile()
     const char* szPdfMagicStart = "%PDF-";
     int i;
 
-    if( m_device.Device()->Read( m_buffer.GetBuffer(), PDF_MAGIC_LEN ) != PDF_MAGIC_LEN )
+    if( m_device.Device()->Read( m_buffer.GetBuffer(), PDF_MAGIC_LEN ) != PDF_MAGIC_LEN ) {
+        assert(0 && 0 && 16);
         return false;
+    }
 
     if( strncmp( m_buffer.GetBuffer(), szPdfMagicStart, strlen( szPdfMagicStart ) ) != 0 )
         return false;
@@ -396,6 +400,9 @@ bool PdfParser::IsPdfFile()
         {
             m_ePdfVersion = static_cast<EPdfVersion>(i);
             break;
+        }
+        if (i == 7) {
+            assert(0 && 0 && 18);
         }
     }
 
@@ -1325,6 +1332,7 @@ void PdfParser::FindToken( const char* pszToken, const long lRange )
     std::streamoff nFileSize = m_device.Device()->Tell();
     if (nFileSize == -1)
     {
+        assert(0 && 0 && 9);
         PODOFO_RAISE_ERROR_INFO(
                 ePdfError_NoXRef,
                 "Failed to seek to EOF when looking for xref");
@@ -1355,6 +1363,7 @@ void PdfParser::FindToken( const char* pszToken, const long lRange )
 
     if( !i )
     {
+        assert(0 && 0 && 11);
         PODOFO_RAISE_ERROR( ePdfError_InternalLogic );
     }
 
@@ -1476,7 +1485,10 @@ void PdfParser::CheckEOFMarker()
         // For strict mode EOF marker must be at the very end of the file
         if( static_cast<size_t>(m_device.Device()->Read( pszBuff, nEOFTokenLen )) != nEOFTokenLen
             && !m_device.Device()->Eof() )
+            {
+                assert(0 && 0 && 20);
             PODOFO_RAISE_ERROR( ePdfError_NoEOFToken );
+            }
 
         if (strncmp( pszBuff, pszEOFToken, nEOFTokenLen) != 0)
             PODOFO_RAISE_ERROR( ePdfError_NoEOFToken );
@@ -1492,6 +1504,7 @@ void PdfParser::CheckEOFMarker()
             if( static_cast<size_t>(m_device.Device()->Read( pszBuff, nEOFTokenLen )) != nEOFTokenLen 
                 && !m_device.Device()->Eof() )
             {
+                assert(0 && 0 && 19);
                 PODOFO_RAISE_ERROR( ePdfError_NoEOFToken );
             }
 
@@ -1501,13 +1514,20 @@ void PdfParser::CheckEOFMarker()
                 break;
             }
             --lCurrentPos;
+            if (lCurrentPos == 64){
+                assert(0 && 0 && 10);
+            }
         }
 
         // Try and deal with garbage by offsetting the buffer reads in PdfParser from now on
         if (bFound)
             m_lLastEOFOffset = (m_nFileSize - (m_device.Device()->Tell()-1)) + nEOFTokenLen;
-        else
+        else {
+            if (!bFound) {
+                assert(0 && 0 && 8);
+            }
             PODOFO_RAISE_ERROR( ePdfError_NoEOFToken );
+        }
     }
 }
 

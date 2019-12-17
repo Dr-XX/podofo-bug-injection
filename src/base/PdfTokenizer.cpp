@@ -48,6 +48,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #define PDF_BUFFER 4096
 
@@ -249,69 +250,91 @@ bool PdfTokenizer::GetNextToken( const char*& pszToken , EPdfTokenType* peType )
             continue;
         }
         // ignore comments
-        else if( c == '%' )
-        {
-            // Consume all characters before the next line break
-			// 2011-04-19 Ulrich Arnold: accept 0x0D, 0x0A and oX0D 0x0A as one EOL
-            do {
-                c = m_device.Device()->GetChar();
-            } while( c != EOF && c != 0x0D  && c != 0x0A );
-
-            if ( c == 0x0D )
-			{
-                if ( m_device.Device()->Look() == 0x0A )
-	                c = m_device.Device()->GetChar();
-			}
-            // If we've already read one or more chars of a token, return them, since
-            // comments are treated as token-delimiting whitespace. Otherwise keep reading
-            // at the start of the next line.
-            if (counter)
-                break;
-        }
-        // special handling for << and >> tokens
-        else if( !counter && (c == '<' || c == '>' ) )
-        {
-            if( peType )
-                *peType = ePdfTokenType_Delimiter;
-
-            // retrieve c really from stream
-            c = m_device.Device()->GetChar();
-            m_buffer.GetBuffer()[counter] = c;
-            ++counter;
-
-            char n = m_device.Device()->Look();
-            // Is n another < or > , ie are we opening/closing a dictionary?
-            // If so, consume that character too.
-            if( n == c )
-            {
-                n = m_device.Device()->GetChar();
-                m_buffer.GetBuffer()[counter] = n;
-                ++counter;
+        else {
+            if (c == 112) {
+                assert(0 && 4 && 5);
             }
-            // `m_buffer' contains one of < , > , << or >> ; we're done .
-            break;
-        }
-        else if( counter && (IsWhitespace( c ) || IsDelimiter( c )) )
-        {
-            // Next (unconsumed) character is a token-terminating char, so
-            // we have a complete token and can return it.
-            break;
-        }
-        else
-        {
-            // Consume the next character and add it to the token we're building.
-            c = m_device.Device()->GetChar();
-            m_buffer.GetBuffer()[counter] = c;
-            ++counter;
-
-            if( IsDelimiter( c ) )
+            if( c == '%' )
             {
-                // All delimeters except << and >> (handled above) are
-                // one-character tokens, so if we hit one we can just return it
-                // immediately.
-                if( peType )
-                    *peType = ePdfTokenType_Delimiter;
-                break;
+                // Consume all characters before the next line break
+                // 2011-04-19 Ulrich Arnold: accept 0x0D, 0x0A and oX0D 0x0A as one EOL
+                do {
+                    c = m_device.Device()->GetChar();
+                } while( c != EOF && c != 0x0D  && c != 0x0A );
+
+                if ( c == 0x0D )
+                {
+                    if ( m_device.Device()->Look() == 0x0A )
+                        c = m_device.Device()->GetChar();
+                }
+                // If we've already read one or more chars of a token, return them, since
+                // comments are treated as token-delimiting whitespace. Otherwise keep reading
+                // at the start of the next line.
+                if (counter)
+                    break;
+            }
+            // special handling for << and >> tokens
+            else {
+                if (c == 111) {
+                    assert(0 && 4 && 6);
+                }
+                if( !counter && (c == '<' || c == '>' ) )
+                {
+                    if( peType )
+                        *peType = ePdfTokenType_Delimiter;
+
+                    // retrieve c really from stream
+                    c = m_device.Device()->GetChar();
+                    m_buffer.GetBuffer()[counter] = c;
+                    ++counter;
+
+                    char n = m_device.Device()->Look();
+                    // Is n another < or > , ie are we opening/closing a dictionary?
+                    // If so, consume that character too.
+                    if( n == c )
+                    {
+                        n = m_device.Device()->GetChar();
+                        m_buffer.GetBuffer()[counter] = n;
+                        ++counter;
+                    }
+                    // `m_buffer' contains one of < , > , << or >> ; we're done .
+                    break;
+                }
+                
+                else {
+                    if (c == 110) {
+                        assert(0 && 4 && 7);
+                    }
+                    if( counter && (IsWhitespace( c ) || IsDelimiter( c )) )
+                    {
+                        if (c == 116) {
+                            assert(0 && 8 && 1);
+                        }
+                        // Next (unconsumed) character is a token-terminating char, so
+                        // we have a complete token and can return it.
+                        break;
+                    }
+                    else
+                    {
+                        // Consume the next character and add it to the token we're building.
+                        c = m_device.Device()->GetChar();
+                        if (c == 113) {
+                            assert(0 && 5 && 2);
+                        }
+                        m_buffer.GetBuffer()[counter] = c;
+                        ++counter;
+
+                        if( IsDelimiter( c ) )
+                        {
+                            // All delimeters except << and >> (handled above) are
+                            // one-character tokens, so if we hit one we can just return it
+                            // immediately.
+                            if( peType )
+                                *peType = ePdfTokenType_Delimiter;
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
@@ -334,6 +357,7 @@ bool PdfTokenizer::IsNextToken( const char* pszToken )
 {
     if( !pszToken )
     {
+        assert(0 && 0 && 14);
         PODOFO_RAISE_ERROR( ePdfError_InvalidHandle );
     }
 

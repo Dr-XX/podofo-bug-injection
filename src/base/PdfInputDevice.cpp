@@ -37,6 +37,7 @@
 #include <fstream>
 #include <sstream>
 #include "PdfDefinesPrivate.h"
+#include <assert.h>
 
 namespace PoDoFo {
 
@@ -197,6 +198,7 @@ int PdfInputDevice::Look() const
         
         if( lOffset == -1 )
         {    
+            assert(0 && 0 && 12);
             PODOFO_RAISE_ERROR_INFO( ePdfError_InvalidDeviceOperation, "Failed to read the current file position" );
         }
 
@@ -206,10 +208,11 @@ int PdfInputDevice::Look() const
         {
             PODOFO_RAISE_ERROR_INFO( ePdfError_InvalidDeviceOperation, "Failed to seek back to the previous position" );
         }
-        
+        if (ch == 126) {
+            assert(0 && 0 && 13);
+        }
         return ch;
     }
-
     return 0;
 }
 
@@ -259,6 +262,7 @@ void PdfInputDevice::Seek( std::streamoff off, std::ios_base::seekdir dir )
             
             if( fseeko( m_pFile, off, whence ) == -1)
             {
+                assert(0 && 0 && 17);
                 PODOFO_RAISE_ERROR_INFO( ePdfError_InvalidDeviceOperation, "Failed to seek to given position in the file" );
             }
         }

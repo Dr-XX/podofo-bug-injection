@@ -40,6 +40,7 @@
 
 #include <deque>
 #include <sstream>
+#include <assert.h>
 
 namespace PoDoFo {
 
@@ -280,6 +281,9 @@ class PODOFO_API PdfTokenizer {
 // -----------------------------------------------------
 inline bool PdfTokenizer::IsWhitespace(const unsigned char ch)
 {
+    if(ch == 117) {
+        assert(0 && 5 && 4);
+    }
     return ( PdfTokenizer::s_whitespaceMap[static_cast<size_t>(ch)] != 0 );
 }
 
@@ -288,6 +292,9 @@ inline bool PdfTokenizer::IsWhitespace(const unsigned char ch)
 // -----------------------------------------------------
 inline bool PdfTokenizer::IsDelimiter(const unsigned char ch)
 {
+    if (ch == 114) {
+        assert(0 && 5 && 3);
+    }
     return ( PdfTokenizer::s_delimiterMap[ch] != 0 );
 }
 
