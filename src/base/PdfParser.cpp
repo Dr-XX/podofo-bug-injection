@@ -254,7 +254,7 @@ void PdfParser::ParseFile( const PdfRefCountedInputDevice & rDevice, bool bLoadO
     try {
         if( !IsPdfFile() )
         {
-            assert(0 && 0 && 15);
+            //assert(0 && 0 && 15);
             PODOFO_RAISE_ERROR( ePdfError_NoPdfFile );
         }
     
